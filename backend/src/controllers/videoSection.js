@@ -167,6 +167,12 @@
 
 
 
+
+
+
+
+
+
 const cloudinary = require('cloudinary').v2;
 const Problem = require("../models/problem");
 const SolutionVideo = require("../models/solutionVideo");
@@ -211,52 +217,6 @@ const generateUploadSignature = async (req, res) => {
 };
 
 // Save video metadata after upload
-// const saveVideoMetadata = async (req, res) => {
-//   try {
-//     const { problemId, cloudinaryPublicId, secureUrl, duration } = req.body;
-//     const userId = req.result._id;
-
-//     // Verify the video exists on Cloudinary
-//     const cloudinaryResource = await cloudinary.api.resource(cloudinaryPublicId, { resource_type: 'video' });
-//     if (!cloudinaryResource) return res.status(400).json({ error: 'Video not found on Cloudinary' });
-
-//     // Check if video already exists for this problem and user
-//     const existingVideo = await SolutionVideo.findOne({ problemId, userId, cloudinaryPublicId });
-//     if (existingVideo) return res.status(409).json({ error: 'Video already exists' });
-
-//     // Generate thumbnail URL (first frame)
-//     const thumbnailUrl = cloudinary.url(cloudinaryPublicId, {
-//       resource_type: "video",
-//       format: "jpg",
-//       start_offset: "1.0"  // 1 second into video
-//     });
-
-//     const videoSolution = await SolutionVideo.create({
-//       problemId,
-//       userId,
-//       cloudinaryPublicId,
-//       secureUrl,
-//       duration: cloudinaryResource.duration || duration,
-//       thumbnailUrl
-//     });
-
-//     res.status(201).json({
-//       message: 'Video solution saved successfully',
-//       videoSolution: {
-//         id: videoSolution._id,
-//         thumbnailUrl: videoSolution.thumbnailUrl,
-//         duration: videoSolution.duration,
-//         uploadedAt: videoSolution.createdAt,
-//         secureUrl: videoSolution.secureUrl
-//       }
-//     });
-//   } catch (error) {
-//     console.error('Error saving video metadata:', error);
-//     res.status(500).json({ error: 'Failed to save video metadata' });
-//   }
-// };
-
-// Save video metadata after upload
 const saveVideoMetadata = async (req, res) => {
   try {
     const { problemId, cloudinaryPublicId, duration } = req.body;
@@ -278,22 +238,23 @@ const saveVideoMetadata = async (req, res) => {
     
     if (existingVideo) return res.status(409).json({ error: 'Video already exists' });
 
-    // Generate thumbnail URL (first frame) - FIXED: Use proper URL generation
+    // Generate high-quality thumbnail URL with proper 16:9 aspect ratio
     const thumbnailUrl = cloudinary.url(cloudinaryPublicId, {
       resource_type: "video",
       format: "jpg",
       transformation: [
-        { width: 400, height: 300, crop: "fill" },
-        { quality: "auto" }
+        { width: 640, height: 360, crop: "fill" }, // 16:9 aspect ratio
+        { quality: "auto" },
+        { fetch_format: "auto" }
       ]
     });
 
-    // FIX: Use cloudinaryResource.secure_url instead of req.body.secureUrl
+    // Use cloudinaryResource.secure_url for guaranteed correct URL
     const videoSolution = await SolutionVideo.create({
       problemId,
       userId,
       cloudinaryPublicId,
-      secureUrl: cloudinaryResource.secure_url, // ← THIS IS THE FIX
+      secureUrl: cloudinaryResource.secure_url,
       duration: cloudinaryResource.duration || duration,
       thumbnailUrl
     });

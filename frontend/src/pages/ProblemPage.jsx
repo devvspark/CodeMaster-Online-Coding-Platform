@@ -493,7 +493,7 @@ const ProblemPage = () => {
                 </div>
               )} */}
 
-              {activeLeftTab === "editorial" && (
+              {/* {activeLeftTab === "editorial" && (
                 <div className="prose max-w-none">
                   <h2 className="text-xl font-bold mb-4">Editorial</h2>
                   <div className="whitespace-pre-wrap text-sm leading-relaxed">
@@ -514,6 +514,45 @@ const ProblemPage = () => {
                             Duration: {Math.floor(problem.duration)} seconds
                           </p>
                         )}
+                      </div>
+                    ) : (
+                      <p className="text-gray-500 italic">
+                        No video solution available yet.
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )} */}
+
+              {activeLeftTab === "editorial" && (
+                <div className="prose max-w-none">
+                  <h2 className="text-xl font-bold mb-4">Editorial</h2>
+                  <div className="whitespace-pre-wrap text-sm leading-relaxed">
+                    {problem.secureUrl ? (
+                      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                        {/* Video Container with fixed aspect ratio */}
+                        <div className="relative pt-[56.25%] bg-black">
+                          {" "}
+                          {/* 16:9 aspect ratio */}
+                          <video
+                            src={problem.secureUrl}
+                            poster={problem.thumbnailUrl}
+                            controls
+                            preload="metadata"
+                            className="absolute top-0 left-0 w-full h-full object-contain"
+                          >
+                            Your browser does not support the video tag.
+                          </video>
+                        </div>
+
+                        {/* Video Info */}
+                        <div className="p-4">
+                          {problem.duration && (
+                            <p className="text-sm text-gray-600">
+                              Duration: {Math.floor(problem.duration)} seconds
+                            </p>
+                          )}
+                        </div>
                       </div>
                     ) : (
                       <p className="text-gray-500 italic">
