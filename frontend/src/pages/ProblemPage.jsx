@@ -466,9 +466,8 @@ const ProblemPage = () => {
                   </div>
                 </div>
               )} */}
-              
 
-              {activeLeftTab === "editorial" && (
+              {/* {activeLeftTab === "editorial" && (
                 <div className="prose max-w-none">
                   <h2 className="text-xl font-bold mb-4">Editorial</h2>
                   <div className="whitespace-pre-wrap text-sm leading-relaxed">
@@ -488,6 +487,37 @@ const ProblemPage = () => {
                     {problem.duration && (
                       <p className="text-sm text-gray-500 mt-2">
                         Duration: {Math.floor(problem.duration)} seconds
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )} */}
+
+              {activeLeftTab === "editorial" && (
+                <div className="prose max-w-none">
+                  <h2 className="text-xl font-bold mb-4">Editorial</h2>
+                  <div className="whitespace-pre-wrap text-sm leading-relaxed">
+                    {problem.secureUrl ? (
+                      <div className="bg-gray-100 p-4 rounded-lg">
+                        <video
+                          src={problem.secureUrl}
+                          poster={problem.thumbnailUrl}
+                          controls
+                          width="100%"
+                          preload="metadata"
+                          className="max-w-full h-auto rounded"
+                        >
+                          Your browser does not support the video tag.
+                        </video>
+                        {problem.duration && (
+                          <p className="text-sm text-gray-600 mt-2">
+                            Duration: {Math.floor(problem.duration)} seconds
+                          </p>
+                        )}
+                      </div>
+                    ) : (
+                      <p className="text-gray-500 italic">
+                        No video solution available yet.
                       </p>
                     )}
                   </div>

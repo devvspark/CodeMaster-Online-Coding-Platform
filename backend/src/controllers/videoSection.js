@@ -211,31 +211,89 @@ const generateUploadSignature = async (req, res) => {
 };
 
 // Save video metadata after upload
+// const saveVideoMetadata = async (req, res) => {
+//   try {
+//     const { problemId, cloudinaryPublicId, secureUrl, duration } = req.body;
+//     const userId = req.result._id;
+
+//     // Verify the video exists on Cloudinary
+//     const cloudinaryResource = await cloudinary.api.resource(cloudinaryPublicId, { resource_type: 'video' });
+//     if (!cloudinaryResource) return res.status(400).json({ error: 'Video not found on Cloudinary' });
+
+//     // Check if video already exists for this problem and user
+//     const existingVideo = await SolutionVideo.findOne({ problemId, userId, cloudinaryPublicId });
+//     if (existingVideo) return res.status(409).json({ error: 'Video already exists' });
+
+//     // Generate thumbnail URL (first frame)
+//     const thumbnailUrl = cloudinary.url(cloudinaryPublicId, {
+//       resource_type: "video",
+//       format: "jpg",
+//       start_offset: "1.0"  // 1 second into video
+//     });
+
+//     const videoSolution = await SolutionVideo.create({
+//       problemId,
+//       userId,
+//       cloudinaryPublicId,
+//       secureUrl,
+//       duration: cloudinaryResource.duration || duration,
+//       thumbnailUrl
+//     });
+
+//     res.status(201).json({
+//       message: 'Video solution saved successfully',
+//       videoSolution: {
+//         id: videoSolution._id,
+//         thumbnailUrl: videoSolution.thumbnailUrl,
+//         duration: videoSolution.duration,
+//         uploadedAt: videoSolution.createdAt,
+//         secureUrl: videoSolution.secureUrl
+//       }
+//     });
+//   } catch (error) {
+//     console.error('Error saving video metadata:', error);
+//     res.status(500).json({ error: 'Failed to save video metadata' });
+//   }
+// };
+
+// Save video metadata after upload
 const saveVideoMetadata = async (req, res) => {
   try {
-    const { problemId, cloudinaryPublicId, secureUrl, duration } = req.body;
+    const { problemId, cloudinaryPublicId, duration } = req.body;
     const userId = req.result._id;
 
-    // Verify the video exists on Cloudinary
-    const cloudinaryResource = await cloudinary.api.resource(cloudinaryPublicId, { resource_type: 'video' });
+    // Verify the video exists on Cloudinary and get the actual secure_url
+    const cloudinaryResource = await cloudinary.api.resource(cloudinaryPublicId, { 
+      resource_type: 'video' 
+    });
+    
     if (!cloudinaryResource) return res.status(400).json({ error: 'Video not found on Cloudinary' });
 
     // Check if video already exists for this problem and user
-    const existingVideo = await SolutionVideo.findOne({ problemId, userId, cloudinaryPublicId });
+    const existingVideo = await SolutionVideo.findOne({ 
+      problemId, 
+      userId, 
+      cloudinaryPublicId 
+    });
+    
     if (existingVideo) return res.status(409).json({ error: 'Video already exists' });
 
-    // Generate thumbnail URL (first frame)
+    // Generate thumbnail URL (first frame) - FIXED: Use proper URL generation
     const thumbnailUrl = cloudinary.url(cloudinaryPublicId, {
       resource_type: "video",
       format: "jpg",
-      start_offset: "1.0"  // 1 second into video
+      transformation: [
+        { width: 400, height: 300, crop: "fill" },
+        { quality: "auto" }
+      ]
     });
 
+    // FIX: Use cloudinaryResource.secure_url instead of req.body.secureUrl
     const videoSolution = await SolutionVideo.create({
       problemId,
       userId,
       cloudinaryPublicId,
-      secureUrl,
+      secureUrl: cloudinaryResource.secure_url, // ← THIS IS THE FIX
       duration: cloudinaryResource.duration || duration,
       thumbnailUrl
     });
