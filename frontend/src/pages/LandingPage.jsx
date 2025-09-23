@@ -3,7 +3,8 @@ import { NavLink } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { logoutUser } from "../authSlice";
-import bgimage from "../assets/LeetcodeHeroBackground.png";
+import bgimage from "../assets/LeetCodeHeroBackground.png";
+
 import axiosClient from "../utils/axiosClient";
 
 function LandingPage() {
