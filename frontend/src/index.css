@@ -1,0 +1,10 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* bar bar color likhna na pade to ye yahape dal diya color yahase use karenge */
+@theme{
+    --color-primary:#0bdbb6;
+    --color-primary-dark:#0d0d0d0;
+}
