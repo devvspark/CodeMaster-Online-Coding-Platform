@@ -4,7 +4,7 @@ import axios from "axios"
 // Create a custom axios instance with predefined configuration
 const axiosClient = axios.create({
     // Base URL for all requests made using this instance
-    baseURL: 'http://localhost:3000',
+    baseURL: import.meta.env.VITE_BASE_URL,
 
     // Allow sending cookies and authentication headers along with requests
     withCredentials: true,
