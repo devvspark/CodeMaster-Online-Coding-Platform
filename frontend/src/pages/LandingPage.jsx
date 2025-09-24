@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { logoutUser } from "../authSlice";
 import bgimage from "../assets/LeetCodeHeroBackground.png";
+import bgimg from "../assets/back.png";
 
 import axiosClient from "../utils/axiosClient";
 
@@ -703,6 +704,7 @@ function LandingPage() {
       </footer>
     </div>
   );
+
 }
 
 export default LandingPage;

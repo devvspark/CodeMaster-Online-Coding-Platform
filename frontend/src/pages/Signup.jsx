@@ -1,25 +1,25 @@
 // Import React hooks
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 // Import React Hook Form and Zod for form handling and validation
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 // Import Redux hooks
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 
 // Import router functions
-import { useNavigate, NavLink } from 'react-router';
+import { useNavigate, NavLink } from "react-router";
 
 // Import the registerUser async action
-import { registerUser } from '../authSlice';
+import { registerUser } from "../authSlice";
 
 // Define validation schema using Zod
 const signupSchema = z.object({
   firstName: z.string().min(3, "Minimum character should be 3"), // first name must be at least 3 characters
   emailId: z.string().email("Invalid Email"), // must be valid email format
-  password: z.string().min(8, "Password is too weak") // password must be at least 8 characters
+  password: z.string().min(8, "Password is too weak"), // password must be at least 8 characters
 });
 
 function Signup() {
@@ -38,7 +38,7 @@ function Signup() {
   // Redirect to home if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/home');
+      navigate("/home");
     }
   }, [isAuthenticated, navigate]);
 
@@ -48,14 +48,17 @@ function Signup() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-base-200"> {/* Full screen centered card */}
+    <div className="min-h-screen flex items-center justify-center p-4 bg-base-200">
+      {" "}
+      {/* Full screen centered card */}
       <div className="card w-96 bg-base-100 shadow-xl">
         <div className="card-body">
-          <h2 className="card-title justify-center text-3xl mb-6">CodeMaster</h2> {/* App title */}
-
+          <h2 className="card-title justify-center text-3xl mb-6">
+            CodeMaster
+          </h2>{" "}
+          {/* App title */}
           {/* Signup Form */}
           <form onSubmit={handleSubmit(onSubmit)}>
-
             {/* First Name Field */}
             <div className="form-control">
               <label className="label">
@@ -64,11 +67,15 @@ function Signup() {
               <input
                 type="text"
                 placeholder="John"
-                className={`input input-bordered w-full ${errors.firstName ? 'input-error' : ''}`} 
-                {...register('firstName')}
+                className={`input input-bordered w-full ${
+                  errors.firstName ? "input-error" : ""
+                }`}
+                {...register("firstName")}
               />
               {errors.firstName && (
-                <span className="text-error text-sm mt-1">{errors.firstName.message}</span>
+                <span className="text-error text-sm mt-1">
+                  {errors.firstName.message}
+                </span>
               )}
             </div>
 
@@ -80,68 +87,119 @@ function Signup() {
               <input
                 type="email"
                 placeholder="john@example.com"
-                className={`input input-bordered w-full ${errors.emailId ? 'input-error' : ''}`}
-                {...register('emailId')}
+                className={`input input-bordered w-full ${
+                  errors.emailId ? "input-error" : ""
+                }`}
+                {...register("emailId")}
               />
               {errors.emailId && (
-                <span className="text-error text-sm mt-1">{errors.emailId.message}</span>
+                <span className="text-error text-sm mt-1">
+                  {errors.emailId.message}
+                </span>
               )}
             </div>
 
             {/* Password Field with Show/Hide Button */}
+            {/* Password Input Field */}
             <div className="form-control mt-4">
               <label className="label">
                 <span className="label-text">Password</span>
               </label>
-              <div className="relative">
+              <div
+                style={{
+                  position: "relative",
+                  display: "flex",
+                  alignItems: "center",
+                  width: "100%",
+                }}
+              >
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
-                  className={`input input-bordered w-full pr-10 ${errors.password ? 'input-error' : ''}`}
-                  {...register('password')}
+                  className={`input input-bordered w-full ${
+                    errors.password ? "input-error" : ""
+                  }`}
+                  style={{
+                    paddingRight: "40px",
+                    boxSizing: "border-box",
+                  }}
+                  {...register("password")}
                 />
-                {/* Toggle Password Visibility Button */}
+                {/* Eye icon button - fixed positioning */}
                 <button
                   type="button"
-                  className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  style={{
+                    position: "absolute",
+                    right: "12px",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                    zIndex: 10,
+                    padding: "4px",
+                  }}
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? (
                     // Eye-off icon
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                      <line x1="1" y1="1" x2="23" y2="23"></line>
                     </svg>
                   ) : (
                     // Eye icon
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
                     </svg>
                   )}
                 </button>
               </div>
+              <div className="mt-2">
+                <p className="text-xs text-gray-500">
+                  Password format e.g:39jG49@8
+                </p>
+              </div>
               {errors.password && (
-                <span className="text-error text-sm mt-1">{errors.password.message}</span>
+                <span className="text-error text-sm mt-1">
+                  {errors.password.message}
+                </span>
               )}
             </div>
 
             {/* Submit Button */}
-            <div className="form-control mt-8 flex justify-center"> 
+            <div className="form-control mt-8 flex justify-center">
               <button
                 type="submit"
-                className={`btn btn-primary ${loading ? 'loading' : ''}`}
+                className={`btn btn-primary ${loading ? "loading" : ""}`}
                 disabled={loading}
               >
-                {loading ? 'Signing Up...' : 'Sign Up'}
+                {loading ? "Signing Up..." : "Sign Up"}
               </button>
             </div>
           </form>
-
           {/* Redirect to Login Page */}
           <div className="text-center mt-6">
             <span className="text-sm">
-              Already have an account?{' '}
+              Already have an account?{" "}
               <NavLink to="/login" className="link link-primary">
                 Login
               </NavLink>
