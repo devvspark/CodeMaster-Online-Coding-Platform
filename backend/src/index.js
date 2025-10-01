@@ -144,7 +144,8 @@ const cors = require('cors');
 app.use(cors({
     origin: [
         "http://localhost:5173",
-        "https://code-master-online-coding-platform.vercel.app"
+        "https://code-master-online-coding-platform.vercel.app",
+        "https://code-master-online-coding-platform-bt5bfkane.vercel.app"
     ],
     credentials: true 
 }));
